@@ -1,22 +1,30 @@
-import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { TamaguiProvider, createTamagui } from '@tamagui/core'
-import { config } from '@tamagui/config/v3'
-import * as themes from './themes'
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+  NavigationContainer,
+} from '@react-navigation/native'
+import { TamaguiProvider } from '@tamagui/core'
+import tamaguiConfig from './tamagui.config'
 
 import First from './views/First'
+import { useColorScheme } from 'react-native'
 
-const tamaguiConfig = createTamagui({ ...config, themes })
 const Stack = createNativeStackNavigator()
 
 export default function App() {
+  const colorScheme = useColorScheme()
+
   return (
-    <TamaguiProvider config={tamaguiConfig}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="First" component={First} />
-        </Stack.Navigator>
-      </NavigationContainer>
+    <TamaguiProvider config={tamaguiConfig} defaultTheme="light">
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="First" component={First} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ThemeProvider>
     </TamaguiProvider>
   )
 }
